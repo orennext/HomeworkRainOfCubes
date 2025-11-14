@@ -2,25 +2,21 @@ using UnityEngine;
 
 public class GameMaster : MonoBehaviour
 {
-    [SerializeField] private float _spawnInterval = 1f;
     [SerializeField] private float _minTimeLife = 2f;
     [SerializeField] private float _maxTimeLife = 5f;
-    [SerializeField] private Spawner _spawner;
     [SerializeField] private ColorChanger _colorChanger;
+    [SerializeField] private SpawnerÑoroutine _spawner;
 
-    private float _spawnTimer = 0f;
-
-    private void Update()
+    private void OnEnable()
     {
-        _spawnTimer += Time.deltaTime;
-        if (_spawnTimer >= _spawnInterval)
-        {
-            _spawnTimer = 0f;
+        _spawner.Created += SubscribeToEvent;
+        _spawner.StartSpawn();
+    }
 
-            Cube cube = _spawner.CreateCube();
-            cube.PlaneClashed += RunDestructionCube;
-            cube.Died += DestructionCube;
-        }
+    private void SubscribeToEvent(Cube cube)
+    {
+        cube.PlaneClashed += RunDestructionCube;
+        cube.Died += DestructionCube;
     }
 
     private void RunDestructionCube(Cube cubeObject)
@@ -36,6 +32,6 @@ public class GameMaster : MonoBehaviour
         cube.PlaneClashed -= RunDestructionCube;
         cube.Died -= DestructionCube;
 
-        _spawner.DestroyCubeObject(cube);
+        _spawner.DestroyObject(cube);
     }
 }

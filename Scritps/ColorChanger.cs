@@ -7,6 +7,6 @@ public class ColorChanger : MonoBehaviour
         Renderer renderer;
 
         if (cubeObject.gameObject.TryGetComponent<Renderer>(out renderer))
-            renderer.material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            renderer.material.color = Random.ColorHSV();
     }
 }
